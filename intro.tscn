@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://bks87u32myiq0"]
+
+[node name="intro" type="Node2D" unique_id=2131171736]
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="." unique_id=1599842050]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=752574720]
