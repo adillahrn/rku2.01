@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dsem47ne7o0js"]
 
 [ext_resource type="Script" uid="uid://ctyr0dvi3pwkt" path="res://main_menu.gd" id="1_06t4h"]
+[ext_resource type="Texture2D" uid="uid://b17lbcb7a1vhc" path="res://assets/images/ruangan/cover.png" id="2_7vrkn"]
 
 [node name="Main Menu" type="Node2D" unique_id=190012470]
 script = ExtResource("1_06t4h")
@@ -34,6 +35,11 @@ offset_top = 460.0
 offset_right = 655.0
 offset_bottom = 503.0
 text = "Quit"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1370528115]
+position = Vector2(720, 480)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_7vrkn")
 
 [connection signal="pressed" from="Button_manager/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="Button_manager/Continue" to="." method="_on_continue_pressed"]
