@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dsem47ne7o0js"]
 
-[ext_resource type="Script" uid="uid://ctyr0dvi3pwkt" path="res://main_menu.gd" id="1_06t4h"]
+[ext_resource type="Script" uid="uid://ctyr0dvi3pwkt" path="res://scripts/main_menu.gd" id="1_06t4h"]
 [ext_resource type="Texture2D" uid="uid://b17lbcb7a1vhc" path="res://assets/images/ruangan/cover.png" id="2_7vrkn"]
 
 [node name="Main Menu" type="Node2D" unique_id=190012470]
@@ -9,36 +9,36 @@ script = ExtResource("1_06t4h")
 [node name="Button_manager" type="Node" parent="." unique_id=1471822489]
 
 [node name="Start" type="Button" parent="Button_manager" unique_id=1082249141]
-offset_left = 986.0
-offset_top = 368.0
-offset_right = 1279.0
-offset_bottom = 423.0
+offset_left = 372.0
+offset_top = 87.0
+offset_right = 537.14545
+offset_bottom = 118.0
 text = "Start Game"
 
 [node name="Continue" type="Button" parent="Button_manager" unique_id=765217426]
-offset_left = 934.0
-offset_top = 434.0
-offset_right = 1179.0
-offset_bottom = 498.0
+offset_left = 373.0
+offset_top = 128.0
+offset_right = 535.0
+offset_bottom = 159.0
 text = "Continue"
 
 [node name="How To Play" type="Button" parent="Button_manager" unique_id=163565563]
-offset_left = 923.0
-offset_top = 531.0
-offset_right = 1183.0
-offset_bottom = 606.0
+offset_left = 374.0
+offset_top = 171.0
+offset_right = 536.0
+offset_bottom = 202.0
 text = "How To Play"
 
 [node name="Quit" type="Button" parent="Button_manager" unique_id=1220585670]
-offset_left = 935.0
-offset_top = 626.0
-offset_right = 1153.0
-offset_bottom = 669.0
+offset_left = 374.0
+offset_top = 212.0
+offset_right = 536.0
+offset_bottom = 243.0
 text = "Quit"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1370528115]
-position = Vector2(720, 480)
-scale = Vector2(1.15, 1.15)
+position = Vector2(290.00018, 190)
+scale = Vector2(0.4634935, 0.46349347)
 texture = ExtResource("2_7vrkn")
 
 [connection signal="pressed" from="Button_manager/Start" to="." method="_on_start_pressed"]

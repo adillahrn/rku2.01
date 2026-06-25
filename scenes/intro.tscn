@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bks87u32myiq0"]
 
-[ext_resource type="Script" uid="uid://onthedi0y88m" path="res://intro.gd" id="1_ayt76"]
-[ext_resource type="Texture2D" uid="uid://300fugd4nh0l" path="res://assets/intro.png" id="1_s2ta7"]
+[ext_resource type="Script" uid="uid://onthedi0y88m" path="res://scripts/intro.gd" id="1_yjqpq"]
+[ext_resource type="Texture2D" uid="uid://300fugd4nh0l" path="res://assets/intro.png" id="2_4bx60"]
 
 [sub_resource type="Animation" id="Animation_7a8ye"]
 length = 0.001
@@ -58,18 +58,18 @@ _data = {
 }
 
 [node name="intro" type="Node2D" unique_id=2131171736]
-script = ExtResource("1_ayt76")
+script = ExtResource("1_yjqpq")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=820252032]
-position = Vector2(720, 483)
-scale = Vector2(1, 1.084)
-texture = ExtResource("1_s2ta7")
+position = Vector2(290, 198)
+scale = Vector2(0.40763885, 0.43020833)
+texture = ExtResource("2_4bx60")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=977739425]
-offset_left = -114.0
-offset_top = -105.0
-offset_right = 1573.0
-offset_bottom = 1083.0
+offset_left = -109.0
+offset_top = -104.0
+offset_right = 724.0
+offset_bottom = 483.0
 color = Color(0, 0, 0, 1)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1193855808]
