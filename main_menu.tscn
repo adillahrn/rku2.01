@@ -9,36 +9,36 @@ script = ExtResource("1_06t4h")
 [node name="Button_manager" type="Node" parent="." unique_id=1471822489]
 
 [node name="Start" type="Button" parent="Button_manager" unique_id=1082249141]
-offset_left = 423.0
-offset_top = 192.0
-offset_right = 716.0
-offset_bottom = 247.0
+offset_left = 986.0
+offset_top = 368.0
+offset_right = 1279.0
+offset_bottom = 423.0
 text = "Start Game"
 
 [node name="Continue" type="Button" parent="Button_manager" unique_id=765217426]
-offset_left = 436.0
-offset_top = 268.0
-offset_right = 681.0
-offset_bottom = 332.0
+offset_left = 934.0
+offset_top = 434.0
+offset_right = 1179.0
+offset_bottom = 498.0
 text = "Continue"
 
 [node name="How To Play" type="Button" parent="Button_manager" unique_id=163565563]
-offset_left = 425.0
-offset_top = 365.0
-offset_right = 685.0
-offset_bottom = 440.0
+offset_left = 923.0
+offset_top = 531.0
+offset_right = 1183.0
+offset_bottom = 606.0
 text = "How To Play"
 
 [node name="Quit" type="Button" parent="Button_manager" unique_id=1220585670]
-offset_left = 437.0
-offset_top = 460.0
-offset_right = 655.0
-offset_bottom = 503.0
+offset_left = 935.0
+offset_top = 626.0
+offset_right = 1153.0
+offset_bottom = 669.0
 text = "Quit"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1370528115]
 position = Vector2(720, 480)
-scale = Vector2(1.2, 1.2)
+scale = Vector2(1.15, 1.15)
 texture = ExtResource("2_7vrkn")
 
 [connection signal="pressed" from="Button_manager/Start" to="." method="_on_start_pressed"]
