@@ -1,9 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://dqpst41nh857m"]
+[gd_scene format=4 uid="uid://dqpst41nh857m"]
 
-[ext_resource type="Script" path="res://scripts/rku.gd" id="1_script"]
-[ext_resource type="PackedScene" uid="uid://i4dkyjcct0xj" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="Script" uid="uid://b2un7nh6w2j1p" path="res://scripts/rku.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://5r44bqvcgtbq" path="res://assets/images/ruangan/lantai background.png" id="1_vo8lw"]
 [ext_resource type="Texture2D" uid="uid://cphibwsmqwix5" path="res://assets/images/ruangan/object rku.png" id="2_8cfcr"]
+[ext_resource type="PackedScene" uid="uid://i4dkyjcct0xj" path="res://scenes/player.tscn" id="2_player"]
 [ext_resource type="Texture2D" uid="uid://bqqoaxyovshoc" path="res://assets/images/ruangan/dinding rku.png" id="3_vl6u6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j0rnu"]
@@ -52,8 +52,18 @@ y_sort_enabled = true
 tile_map_data = PackedByteArray("AAADAAcAAAAAAAQAAAASAAgAAAAHAAYAAAAEAA8AAAACAAsAAAALAA8AAAACAAsAAAASAA8AAAACAAsAAAAZAA8AAAACAAsAAAAgAA8AAAACAAsAAAAEABUAAAACAAsAAAALABUAAAACAAsAAAASABUAAAACAAsAAAAZABUAAAACAAsAAAAgABUAAAACAAsAAAA=")
 tile_set = SubResource("TileSet_owio3")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1865348322]
 position = Vector2(288, 192)
 
-[node name="player" parent="." instance=ExtResource("2_player")]
+[node name="player" parent="." unique_id=1772178503 instance=ExtResource("2_player")]
 position = Vector2(360, 260)
+
+[node name="ScreenEffects" type="CanvasLayer" parent="." unique_id=1832673733]
+
+[node name="FadeRect" type="ColorRect" parent="ScreenEffects" unique_id=387396411]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)

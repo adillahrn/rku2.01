@@ -2,9 +2,25 @@ extends Node2D
 
 @onready var camera: Camera2D = $Camera2D
 @onready var player: Player = $player
+@onready var fade_rect: ColorRect = $ScreenEffects/FadeRect
 
 var is_flickering: bool = true
 var camera_follow_player: bool = false
+
+# dialog opening Arga
+var dialogue_lines: Array[Dictionary] = [
+	{"speaker": "Arga", "expression": "confused", "text": "...What?"},
+	{"speaker": "Arga", "expression": "mikir", "text": "Did I really fall asleep here?"},
+	{"speaker": "Arga", "expression": "bingung", "text": "Why is it so dark?"},
+	{"speaker": "Arga", "expression": "sedih", "text": "Where am I?"},
+	{"speaker": "Arga", "expression": "confused", "text": "...RKU 2.01?"},
+	{"speaker": "Arga", "expression": "confused", "text": "Wait."},
+	{"speaker": "Arga", "expression": "confused", "text": "2:01 AM?"},
+	{"speaker": "Arga", "expression": "sedih", "text": "You've got to be kidding me."},
+	{"speaker": "Arga", "expression": "sedih", "text": "Did everyone seriously leave me here?"},
+	{"speaker": "Arga", "expression": "mikir", "text": "Okay."},
+	{"speaker": "Arga", "expression": "mikir", "text": "I need to get out."}
+]
 
 func _ready() -> void:
 	# cek error biar ga crash kalau nodenya ilang
@@ -12,6 +28,9 @@ func _ready() -> void:
 		push_error("player or Camera2D node not found in Rku scene!")
 		return
 		
+	# set baseline environment redup kebiruan pas start
+	self.modulate = Color(0.8, 0.8, 0.95)
+	
 	# matiin gerak player pas opening
 	player.can_move = false
 	
@@ -29,6 +48,13 @@ func _ready() -> void:
 		camera.limit_right = int(pos.x + texture_size.x / 2)
 		camera.limit_bottom = int(pos.y + texture_size.y / 2)
 	
+	# transisi masuk (fade in dari hitam perlahan selama 1.5 detik)
+	if fade_rect:
+		fade_rect.color = Color(0, 0, 0, 1)
+		fade_rect.visible = true
+		var fade_tween = create_tween()
+		fade_tween.tween_property(fade_rect, "color", Color(0, 0, 0, 0), 1.5)
+	
 	# mulai lampu kedap kedip
 	flicker_lights()
 	
@@ -42,12 +68,18 @@ func _ready() -> void:
 	zoom_tween.tween_property(camera, "zoom", Vector2(1.0, 1.0), 1.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	await zoom_tween.finished
 	
-	# matiin lampu kedap kedip, balikin lampu normal
+	# nunggu bentar sebelum dialog
+	await get_tree().create_timer(0.5).timeout
+	
+	# trigger dialogue pembuka
+	await DialogueManager.start_dialogue(dialogue_lines)
+	
+	# matiin lampu kedap kedip, set lampu ke redup kebiruan yang konstan (baseline)
 	is_flickering = false
-	self.modulate = Color(1, 1, 1)
+	self.modulate = Color(0.8, 0.8, 0.95)
 	
 	# nunggu bentar
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(0.3).timeout
 	
 	# balikin kontrol ke player dan pasang camera ke player
 	player.can_move = true
@@ -64,11 +96,11 @@ func flicker_lights() -> void:
 		if not is_flickering:
 			break
 			
-		# kedip dua kali (redupin terus balikin normal)
-		self.modulate = Color(0.65, 0.65, 0.75)
+		# kedip dua kali (redupin terus balikin ke redup kebiruan baseline)
+		self.modulate = Color(0.5, 0.5, 0.65)
 		await get_tree().create_timer(0.06).timeout
-		self.modulate = Color(1.0, 1.0, 1.0)
+		self.modulate = Color(0.8, 0.8, 0.95)
 		await get_tree().create_timer(0.05).timeout
-		self.modulate = Color(0.65, 0.65, 0.75)
+		self.modulate = Color(0.5, 0.5, 0.65)
 		await get_tree().create_timer(0.08).timeout
-		self.modulate = Color(1.0, 1.0, 1.0)
+		self.modulate = Color(0.8, 0.8, 0.95)

@@ -4,11 +4,19 @@ signal dialogue_finished
 
 @export var type_speed: float = 0.03
 
-@onready var panel: Panel = $Control/Panel
-@onready var name_label: Label = $Control/Panel/NameLabel
-@onready var name_box: Panel = $Control/Panel/NameBox
-@onready var text_label: RichTextLabel = $Control/Panel/TextLabel
-@onready var next_indicator: Label = $Control/Panel/NextIndicator
+# preload ekspresi wajah Arga biar ga ngelag pas ganti
+const EXPRESSIONS = {
+	"confused": preload("res://assets/images/ui/confused.png"),
+	"bingung": preload("res://assets/images/ui/bingung.png"),
+	"sedih": preload("res://assets/images/ui/sedih.png"),
+	"mikir": preload("res://assets/images/ui/mikir.png")
+}
+
+@onready var dialogue_panel: TextureRect = $Control/DialoguePanel
+@onready var name_label: Label = $Control/DialoguePanel/NameLabel
+@onready var text_label: RichTextLabel = $Control/DialoguePanel/TextLabel
+@onready var next_indicator: TextureRect = $Control/DialoguePanel/NextIndicator
+@onready var portrait_rect: TextureRect = $Control/Portrait
 
 var dialogue_lines: Array = []
 var current_line_index: int = 0
@@ -37,19 +45,34 @@ func _input(event: InputEvent) -> void:
 func show_line(line_data) -> void:
 	var speaker = ""
 	var text = ""
+	var expression = ""
 	
 	if line_data is Dictionary:
 		speaker = line_data.get("speaker", "")
 		text = line_data.get("text", "")
+		expression = line_data.get("expression", "")
 	else:
 		text = str(line_data)
 		
 	# atur nama pembicara
 	if speaker != "":
 		name_label.text = speaker
-		name_box.visible = true
+		name_label.visible = true
 	else:
-		name_box.visible = false
+		name_label.visible = false
+		
+	# atur ekspresi portrait
+	if expression != "" and EXPRESSIONS.has(expression):
+		portrait_rect.texture = EXPRESSIONS[expression]
+		portrait_rect.visible = true
+	else:
+		# sembunyiin portrait kalau ga ada speaker / narrator
+		if speaker == "":
+			portrait_rect.visible = false
+		else:
+			# default ke confused kalau speaker ada tapi ga ada ekspresi spesifik
+			portrait_rect.texture = EXPRESSIONS["confused"]
+			portrait_rect.visible = true
 		
 	text_label.text = text
 	text_label.visible_ratio = 0.0
@@ -70,12 +93,6 @@ func show_line(line_data) -> void:
 func _on_typing_finished() -> void:
 	is_typing = false
 	next_indicator.visible = true
-	# buat efek lampu kedip di indikator lanjut
-	var blink_tween = create_tween().set_loops()
-	blink_tween.tween_property(next_indicator, "modulate:a", 0.0, 0.4)
-	blink_tween.tween_property(next_indicator, "modulate:a", 1.0, 0.4)
-	# simpen tween kedip biar bisa dimatiin pas lanjut
-	typing_tween = blink_tween
 
 func advance() -> void:
 	if is_typing:
@@ -92,3 +109,9 @@ func advance() -> void:
 			if typing_tween and typing_tween.is_valid():
 				typing_tween.kill()
 			dialogue_finished.emit()
+
+func _process(_delta: float) -> void:
+	if next_indicator and next_indicator.visible:
+		# animasi kedip buat icon surat (next indicator)
+		var time = Time.get_ticks_msec() / 1000.0
+		next_indicator.modulate.a = 0.35 + abs(sin(time * 4.5)) * 0.65
