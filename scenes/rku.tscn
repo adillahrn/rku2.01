@@ -10,24 +10,30 @@
 texture = ExtResource("3_vl6u6")
 0:0/size_in_atlas = Vector2i(36, 9)
 0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_oqgg5"]
+physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_j0rnu")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ln3s0"]
 texture = ExtResource("2_8cfcr")
 0:4/size_in_atlas = Vector2i(7, 6)
 0:4/0 = 0
+0:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10.16053, -40.077644, 26.530273, -40.077644, 24.836853, -14.676323, 51.367126, -15.240795, 50.80265, 14.111847, 49.10923, 49.109222, -37.819748, 48.544754, -41.20659, -15.805267, -11.8539505, -14.676323)
 7:6/size_in_atlas = Vector2i(23, 5)
 7:6/0 = 0
+7:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-191.93698, -38.906143, 180.69923, -37.20279, 171.84145, 24.801865, -181.56201, 25.937439)
 2:11/size_in_atlas = Vector2i(5, 6)
 2:11/0 = 0
+2:11/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8.196167, -43.029842, 24.836853, -42.900017, 25.401329, -15.240795, 22.578957, 1.1289482, 22.578957, 36.690804, 16.93422, 37.255272, 14.111847, 24.836853, -16.934216, 24.272377, -17.498688, 34.997375, -23.707901, 35.56185, -24.272373, -8.46711, -21.450005, -19.756588, -21.85643, -34.15067)
 30:4/size_in_atlas = Vector2i(6, 5)
 30:4/0 = 0
+30:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-43.464485, -30.48159, 39.51317, -29.917116, 37.20279, 7.0862427, 37.819748, 31.046059, -42.33554, 31.610535)
 
 [sub_resource type="TileSet" id="TileSet_owio3"]
+physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_ln3s0")
-
 
 [node name="Rku" type="Node2D" unique_id=349240385]
 script = ExtResource("1_script")
@@ -42,6 +48,7 @@ tile_map_data = PackedByteArray("AAASAAQAAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_oqgg5")
 
 [node name="objek" type="TileMapLayer" parent="." unique_id=695590100]
+y_sort_enabled = true
 tile_map_data = PackedByteArray("AAADAAcAAAAAAAQAAAASAAgAAAAHAAYAAAAEAA8AAAACAAsAAAALAA8AAAACAAsAAAASAA8AAAACAAsAAAAZAA8AAAACAAsAAAAgAA8AAAACAAsAAAAEABUAAAACAAsAAAALABUAAAACAAsAAAASABUAAAACAAsAAAAZABUAAAACAAsAAAAgABUAAAACAAsAAAA=")
 tile_set = SubResource("TileSet_owio3")
 
