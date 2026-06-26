@@ -22,6 +22,10 @@ DialogueManager="*res://scripts/dialogue_manager.gd"
 
 DialogueManager="*res://scripts/dialogue_manager.gd"
 
+[autoload]
+
+DialogueManager="*res://scripts/dialogue_manager.gd"
+
 [display]
 
 window/size/viewport_width=576
