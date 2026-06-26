@@ -1,0 +1,47 @@
+[gd_scene format=4 uid="uid://dqpst41nh857m"]
+
+[ext_resource type="Texture2D" uid="uid://5r44bqvcgtbq" path="res://assets/images/ruangan/lantai background.png" id="1_vo8lw"]
+[ext_resource type="Texture2D" uid="uid://cphibwsmqwix5" path="res://assets/images/ruangan/object rku.png" id="2_8cfcr"]
+[ext_resource type="Texture2D" uid="uid://bqqoaxyovshoc" path="res://assets/images/ruangan/dinding rku.png" id="3_vl6u6"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j0rnu"]
+texture = ExtResource("3_vl6u6")
+0:0/size_in_atlas = Vector2i(36, 9)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_oqgg5"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_j0rnu")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ln3s0"]
+texture = ExtResource("2_8cfcr")
+0:4/size_in_atlas = Vector2i(7, 6)
+0:4/0 = 0
+0:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+7:6/size_in_atlas = Vector2i(23, 5)
+7:6/0 = 0
+7:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-41.367504, -14.388698, -13.528702, -14.461727, -13.528702, -17.727278, -13.528702, -39.186615, 27.057419, -40.586136, 27.057419, -14.928234, 52.518745, -16.007427, 52.113964, -12.456392, 48.56186, 18.705309, 48.493958, 48.49395, 43.029846, 44.395866, -33.46765, 43.712852, -38.248734, 49.176964, -38.130047, 18.52545)
+2:11/size_in_atlas = Vector2i(5, 6)
+2:11/0 = 0
+30:4/size_in_atlas = Vector2i(6, 5)
+30:4/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_owio3"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_ln3s0")
+
+[node name="Rku" type="Node2D" unique_id=349240385]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2137341278]
+position = Vector2(289, 193)
+texture = ExtResource("1_vo8lw")
+
+[node name="papan" type="TileMapLayer" parent="." unique_id=1973458643]
+y_sort_enabled = true
+tile_map_data = PackedByteArray("AAASAAQAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_oqgg5")
+
+[node name="objek" type="TileMapLayer" parent="." unique_id=695590100]
+tile_map_data = PackedByteArray("AAADAAcAAAAAAAQAAAASAAgAAAAHAAYAAAAEAA8AAAACAAsAAAALAA8AAAACAAsAAAASAA8AAAACAAsAAAAZAA8AAAACAAsAAAAgAA8AAAACAAsAAAAEABUAAAACAAsAAAALABUAAAACAAsAAAASABUAAAACAAsAAAAZABUAAAACAAsAAAAgABUAAAACAAsAAAA=")
+tile_set = SubResource("TileSet_owio3")
