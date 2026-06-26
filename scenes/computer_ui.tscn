@@ -62,6 +62,18 @@ theme_override_font_sizes/font_size = 18
 text = "Welcome, User."
 autowrap_mode = 3
 
+[node name="PasswordInput" type="LineEdit" parent="WindowContent/Body"]
+visible = false
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.05, 0.05, 0.15, 1)
+theme_override_colors/placeholder_color = Color(0.4, 0.4, 0.5, 0.6)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 18
+placeholder_text = "Enter password..."
+alignment = 1
+max_length = 15
+
 [node name="LockImg" type="TextureRect" parent="WindowContent/Body"]
 visible = false
 custom_minimum_size = Vector2(32, 32)
