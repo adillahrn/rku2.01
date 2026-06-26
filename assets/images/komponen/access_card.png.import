@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cxcn1vwhlyjms"
-path="res://.godot/imported/VBG EXPO STRUKTUR DATA.png-44316fd4327b29542c4e20fe7951b3ea.ctex"
+uid="uid://dfo4xxu1q2x50"
+path="res://.godot/imported/access_card.png-f1c7bb0247d6e9c026344cf722fd3b54.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/music/VBG EXPO STRUKTUR DATA.png"
-dest_files=["res://.godot/imported/VBG EXPO STRUKTUR DATA.png-44316fd4327b29542c4e20fe7951b3ea.ctex"]
+source_file="res://assets/images/komponen/access_card.png"
+dest_files=["res://.godot/imported/access_card.png-f1c7bb0247d6e9c026344cf722fd3b54.ctex"]
 
 [params]
 
