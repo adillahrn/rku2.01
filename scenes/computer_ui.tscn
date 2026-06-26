@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://daru0q186xbis"]
+
+[ext_resource type="Script" uid="uid://b3nqjabxv7n41" path="res://scripts/computer_ui.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://empqr0pqg1bc" path="res://assets/images/ui/screen_light.png" id="2_screen_light"]
+[ext_resource type="Texture2D" uid="uid://bafl6oaqvl1r5" path="res://assets/images/ui/screen_dark.png" id="3_screen_dark"]
+[ext_resource type="Texture2D" uid="uid://hodlnnvjts7q" path="res://assets/images/ui/loading.png" id="4_loading"]
+[ext_resource type="FontFile" uid="uid://8kby4rs5kyg8" path="res://assets/fonts/Nintendo-DS-BIOS-vasified.ttf" id="5_font"]
+[ext_resource type="Texture2D" uid="uid://cfmpjtrlqqg7x" path="res://assets/images/ui/lock.png" id="6_lock"]
+
+[node name="ComputerUI" type="CanvasLayer"]
+visible = false
+script = ExtResource("1_script")
+
+[node name="BgLight" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_screen_light")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BgDark" type="TextureRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_screen_dark")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="WindowContent" type="VBoxContainer" parent="."]
+offset_left = 123.0
+offset_top = 59.0
+offset_right = 446.0
+offset_bottom = 292.0
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="WindowContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 18
+text = "FMIPA Computer System"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Body" type="VBoxContainer" parent="WindowContent"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="BodyText" type="Label" parent="WindowContent/Body"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 18
+text = "Welcome, User."
+autowrap_mode = 3
+
+[node name="LockImg" type="TextureRect" parent="WindowContent/Body"]
+visible = false
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("6_lock")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SubText" type="Label" parent="WindowContent/Body"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 18
+text = ""
+autowrap_mode = 3
+
+[node name="ChoiceContainer" type="VBoxContainer" parent="WindowContent/Body"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LoadingImg" type="TextureRect" parent="WindowContent/Body"]
+visible = false
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("4_loading")
+expand_mode = 1
+stretch_mode = 5
+pivot_offset = Vector2(40, 40)
+
+[node name="ActionBtn" type="Button" parent="WindowContent"]
+visible = false
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.05, 0.05, 0.15, 1)
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 18
+text = "Continue >"
