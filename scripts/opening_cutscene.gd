@@ -12,6 +12,7 @@ extends Control
 @onready var dialogue_label: RichTextLabel = $CenterContainer/VBoxContainer/DialogueLabel
 @onready var mail_icon: TextureRect = $CenterContainer/VBoxContainer/MailIconContainer/MailIcon
 @onready var fade_overlay: ColorRect = $FadeOverlay
+@onready var typewriter_sfx: AudioStreamPlayer = $TypewriterSFX
 
 var current_line_index: int = 0
 var is_typing: bool = false
@@ -19,6 +20,7 @@ var typing_tween: Tween = null
 var is_transitioning: bool = false
 
 func _ready() -> void:
+	AudioManager.play_bgm("res://assets/music/bgm_lost_in_thought.mp3")
 	fade_overlay.color = Color(0, 0, 0, 1)
 	var fade_in_tween = create_tween()
 	fade_in_tween.tween_property(fade_overlay, "color", Color(0, 0, 0, 0), 1.0)
@@ -66,10 +68,17 @@ func show_line(text: String) -> void:
 	typing_tween = create_tween()
 	typing_tween.tween_property(dialogue_label, "visible_ratio", 1.0, duration)
 	typing_tween.finished.connect(_on_typing_finished)
+	
+	# Play typewriter sound effect
+	if typewriter_sfx:
+		typewriter_sfx.play(5.0)
 
 # Function buat handle kalau typing selesai
 func _on_typing_finished() -> void:
 	is_typing = false
+	# Stop typewriter sound effect
+	if typewriter_sfx and typewriter_sfx.playing:
+		typewriter_sfx.stop()
 	if mail_icon:
 		mail_icon.visible = true
 
@@ -81,6 +90,9 @@ func advance_dialogue() -> void:
 			typing_tween.kill()
 		dialogue_label.visible_ratio = 1.0
 		is_typing = false
+		# Stop typewriter sound effect saat skip
+		if typewriter_sfx and typewriter_sfx.playing:
+			typewriter_sfx.stop()
 		if mail_icon:
 			mail_icon.visible = true
 	else:
@@ -95,6 +107,9 @@ func start_transition() -> void:
 	is_transitioning = true
 	if typing_tween and typing_tween.is_valid():
 		typing_tween.kill()
+	# Stop typewriter sound effect saat transition
+	if typewriter_sfx and typewriter_sfx.playing:
+		typewriter_sfx.stop()
 
 	# Fade ke hitam -> ganti scene	
 	var fade_tween = create_tween()

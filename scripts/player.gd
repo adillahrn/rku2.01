@@ -7,12 +7,14 @@ class_name Player extends CharacterBody2D
 @export var has_key: bool = false
 
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var footstep_sfx: AudioStreamPlayer = $FootstepSFX
 
 var can_move: bool = true
 var current_anim: String = ""
 var frame_index: float = 0.0
 var facing_direction: String = "down"
 var anim_textures: Dictionary = {}
+var footstep_cooldown: float = 0.0
 
 func _ready() -> void:
 	_load_textures()
@@ -40,6 +42,9 @@ func _load_textures() -> void:
 
 # fungsi buat ngereact input
 func _physics_process(delta: float) -> void:
+	if footstep_cooldown > 0:
+		footstep_cooldown -= delta
+		
 	# cek apakah bisa gerak atau nggak terutama buat cutscene atau dialogue
 	if not can_move:
 		velocity = Vector2.ZERO
@@ -116,7 +121,17 @@ func _update_animation(state: String, dir: String) -> void:
 # fungsi buat ngatur animasi juga
 func _animate(delta: float) -> void:
 	if sprite.hframes > 1:
+		var prev_frame = int(frame_index)
 		frame_index += delta * anim_fps
 		if frame_index >= sprite.hframes:
 			frame_index = 0.0
 		sprite.frame = int(frame_index)
+		
+		# Play footstep sound pas karakter ngelangkah (frame 1 dan 3)
+		var current_frame = int(frame_index)
+		if current_frame != prev_frame and (current_frame == 1 or current_frame == 3):
+			if footstep_sfx and footstep_cooldown <= 0.0:
+				# random pitch dikit biar kedengaran natural (ngga kaku)
+				footstep_sfx.pitch_scale = randf_range(0.85, 1.15)
+				footstep_sfx.play()
+				footstep_cooldown = 0.55 # Jeda 0.55 detik biar langkahnya lebih pelan

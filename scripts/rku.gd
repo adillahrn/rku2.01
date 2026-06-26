@@ -25,6 +25,7 @@ var dialogue_lines: Array[Dictionary] = [
 ]
 
 func _ready() -> void:
+	AudioManager.play_bgm("res://assets/music/bgm_explore1.mp3")
 	# cek error biar ga crash kalau nodenya ilang
 	if not has_node("player") or not has_node("Camera2D"):
 		push_error("player or Camera2D node not found in Rku scene!")
