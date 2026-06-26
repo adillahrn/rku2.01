@@ -18,6 +18,10 @@ config/features=PackedStringArray("4.6", "Forward Plus")
 
 DialogueManager="*res://scripts/dialogue_manager.gd"
 
+[autoload]
+
+DialogueManager="*res://scripts/dialogue_manager.gd"
+
 [display]
 
 window/size/viewport_width=576
