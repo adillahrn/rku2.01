@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://i4dkyjcct0xj"]
 
 [ext_resource type="Script" uid="uid://buta4xge5qfje" path="res://scripts/player.gd" id="1_3vyb7"]
+[ext_resource type="AudioStream" path="res://assets/music/footstep.mp3" id="2_footstep"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3vyb7"]
 
@@ -15,3 +16,7 @@ shape = SubResource("CircleShape2D_3vyb7")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1616613301]
 position = Vector2(0, -40)
+
+[node name="FootstepSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_footstep")
+volume_db = -5.0
