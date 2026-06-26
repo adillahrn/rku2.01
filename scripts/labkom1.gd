@@ -46,6 +46,7 @@ var scare_system_dialogue: Array[Dictionary] = [
 ]
 
 func _ready() -> void:
+	AudioManager.play_bgm("res://assets/music/bgm_luminous_time.mp3")
 	self.modulate = Color(0.8, 0.8, 0.95)
 	
 	# Instance Player dari koridor
@@ -274,6 +275,10 @@ func _trigger_post_quiz_event() -> void:
 	
 	# Jalankan dialog penemuan/penerimaan access card (SCENE 4)
 	await DialogueManager.start_dialogue(card_dialogue)
+	
+	# Play horror sound effect & tense background music
+	AudioManager.play_sfx("res://assets/music/se_horror1.mp3")
+	AudioManager.play_bgm("res://assets/music/bgm_scare_hazy_eyes.mp3", 0.1)
 	
 	# Efek kejut (SCENE 4): Flash layar merah redup, camera shake, dan bunyi langkah kaki luar
 	self.modulate = Color(1.0, 0.4, 0.4) # Lingkungan berubah menjadi merah redup mencekam

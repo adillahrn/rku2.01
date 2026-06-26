@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.6", "Forward Plus")
 [autoload]
 
 DialogueManager="*res://scripts/dialogue_manager.gd"
+AudioManager="*res://scripts/audio_manager.gd"
 
 [display]
 

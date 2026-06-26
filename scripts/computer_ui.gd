@@ -237,6 +237,7 @@ func _show_state(state: State) -> void:
 				else:
 					_show_state(State.FAILURE)
 		State.SUCCESS:
+			AudioManager.play_sfx("res://assets/music/se_portal_open.mp3")
 			if win_title:
 				win_title.text = "FMIPA System Terminal"
 				win_title.modulate = Color(0.2, 1.0, 0.3)
@@ -249,6 +250,7 @@ func _show_state(state: State) -> void:
 			print("[DEBUG COMPUTER] State SUCCESS reached. Emitting access_card_obtained.")
 			access_card_obtained.emit()
 		State.FAILURE:
+			AudioManager.play_sfx("res://assets/music/se_screen_error.mp3")
 			if win_title:
 				win_title.text = "Authentication System"
 				win_title.modulate = Color(0.2, 1.0, 0.3)

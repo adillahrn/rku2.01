@@ -19,6 +19,7 @@ var typing_tween: Tween = null
 var is_transitioning: bool = false
 
 func _ready() -> void:
+	AudioManager.play_bgm("res://assets/music/bgm_lost_in_thought.mp3")
 	fade_overlay.color = Color(0, 0, 0, 1)
 	var fade_in_tween = create_tween()
 	fade_in_tween.tween_property(fade_overlay, "color", Color(0, 0, 0, 0), 1.0)

@@ -36,6 +36,7 @@ var downstairs_dialogue: Array[Dictionary] = [
 ]
 
 func _ready() -> void:
+	AudioManager.play_bgm("res://assets/music/bgm_explore2.mp3")
 	# Set baseline environment redup kebiruan pas start
 	self.modulate = Color(0.8, 0.8, 0.95)
 	
@@ -326,6 +327,9 @@ func interact_with_stairs() -> void:
 			var fade_tween = create_tween()
 			fade_tween.tween_property(fade_rect, "color", Color(0, 0, 0, 1), 1.5)
 			await fade_tween.finished
+		
+		# Start tension music for scene 5
+		AudioManager.play_bgm("res://assets/music/bgm_scare_tension3.mp3", 0.5)
 		
 		# Jalankan dialog pasca turun tangga pada latar hitam pekat (SCENE 5)
 		await DialogueManager.start_dialogue(downstairs_dialogue)
