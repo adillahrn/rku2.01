@@ -9,7 +9,8 @@ extends Control
 
 @export var type_speed: float = 0.04
 
-@onready var dialogue_label: RichTextLabel = $CenterContainer/DialogueLabel
+@onready var dialogue_label: RichTextLabel = $CenterContainer/VBoxContainer/DialogueLabel
+@onready var mail_icon: TextureRect = $CenterContainer/VBoxContainer/MailIconContainer/MailIcon
 @onready var fade_overlay: ColorRect = $FadeOverlay
 
 var current_line_index: int = 0
@@ -21,6 +22,9 @@ func _ready() -> void:
 	fade_overlay.color = Color(0, 0, 0, 1)
 	var fade_in_tween = create_tween()
 	fade_in_tween.tween_property(fade_overlay, "color", Color(0, 0, 0, 0), 1.0)
+	
+	if mail_icon:
+		mail_icon.visible = false
 	
 	if dialogue_lines.size() > 0:
 		show_line(dialogue_lines[0])
@@ -49,6 +53,8 @@ func show_line(text: String) -> void:
 	dialogue_label.text = "[center]" + text + "[/center]"
 	dialogue_label.visible_ratio = 0.0
 	is_typing = true
+	if mail_icon:
+		mail_icon.visible = false
 	
 	var duration = text.length() * type_speed
 	if duration <= 0:
@@ -64,6 +70,8 @@ func show_line(text: String) -> void:
 # Function buat handle kalau typing selesai
 func _on_typing_finished() -> void:
 	is_typing = false
+	if mail_icon:
+		mail_icon.visible = true
 
 # Function buat lanjut dialogue
 func advance_dialogue() -> void:
@@ -73,6 +81,8 @@ func advance_dialogue() -> void:
 			typing_tween.kill()
 		dialogue_label.visible_ratio = 1.0
 		is_typing = false
+		if mail_icon:
+			mail_icon.visible = true
 	else:
 		current_line_index += 1
 		if current_line_index < dialogue_lines.size():
@@ -92,3 +102,10 @@ func start_transition() -> void:
 	await fade_tween.finished
 	
 	get_tree().change_scene_to_file("res://scenes/rku.tscn")
+
+func _process(delta: float) -> void:
+	if mail_icon and mail_icon.visible:
+		# pulsing alpha biar kayak tombol continue retro yang hidup
+		var time = Time.get_ticks_msec() / 1000.0
+		mail_icon.modulate.a = 0.35 + abs(sin(time * 4.5)) * 0.65
+

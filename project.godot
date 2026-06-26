@@ -12,15 +12,7 @@ config_version=5
 
 config/name="rku201"
 run/main_scene="res://scenes/intro.tscn"
-config/features=PackedStringArray("4.6", "Forward Plus")
-
-[autoload]
-
-DialogueManager="*res://scripts/dialogue_manager.gd"
-
-[autoload]
-
-DialogueManager="*res://scripts/dialogue_manager.gd"
+config/features=PackedStringArray("4.7", "Forward Plus")
 
 [autoload]
 
