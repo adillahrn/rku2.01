@@ -4,6 +4,7 @@ class_name Player extends CharacterBody2D
 @export var run_speed: float = 170.0
 @export var anim_fps: float = 8.0
 @export var has_bag: bool = false
+@export var has_key: bool = false
 
 @onready var sprite: Sprite2D = $Sprite2D
 
@@ -77,6 +78,14 @@ func _physics_process(delta: float) -> void:
 		_update_animation("idle", facing_direction)
 
 	move_and_slide()
+	
+	# Logger tabrakan untuk debug di console editor
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		if collider:
+			print("[DEBUG COLLISION] Menabrak: ", collider.name, " di koordinat global: ", collision.get_position(), " | Normal: ", collision.get_normal())
+			
 	_animate(delta)
 
 # fungsi buat ngatur animasi
