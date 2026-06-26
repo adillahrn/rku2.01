@@ -217,6 +217,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func exit_classroom() -> void:
 	player.can_move = false
+	DialogueManager.player_has_bag = player.has_bag
+	DialogueManager.player_has_key = player.has_key
 	if fade_rect:
 		fade_rect.visible = true
 		var fade_tween = create_tween()

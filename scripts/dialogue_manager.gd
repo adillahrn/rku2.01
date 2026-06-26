@@ -7,6 +7,9 @@ var is_dialogue_active: bool = false
 var dialogue_box_scene = preload("res://scenes/dialogue_box.tscn")
 var current_dialogue_box = null
 
+var player_has_bag: bool = false
+var player_has_key: bool = false
+
 func start_dialogue(lines: Array) -> void:
 	if is_dialogue_active:
 		return

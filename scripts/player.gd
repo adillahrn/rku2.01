@@ -77,6 +77,14 @@ func _physics_process(delta: float) -> void:
 		_update_animation("idle", facing_direction)
 
 	move_and_slide()
+	
+	# Logger tabrakan untuk debug di console editor
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		if collider:
+			print("[DEBUG COLLISION] Menabrak: ", collider.name, " di koordinat global: ", collision.get_position(), " | Normal: ", collision.get_normal())
+			
 	_animate(delta)
 
 # fungsi buat ngatur animasi
