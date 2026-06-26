@@ -36,7 +36,10 @@ var downstairs_dialogue: Array[Dictionary] = [
 ]
 
 func _ready() -> void:
-	AudioManager.play_bgm("res://assets/music/bgm_explore2.mp3")
+	if DialogueManager.player_has_key:
+		AudioManager.play_bgm("res://assets/music/bgm_scare_tension3.mp3")
+	else:
+		AudioManager.play_bgm("res://assets/music/bgm_explore2.mp3")
 	# Set baseline environment redup kebiruan pas start
 	self.modulate = Color(0.8, 0.8, 0.95)
 	
@@ -334,8 +337,8 @@ func interact_with_stairs() -> void:
 		# Jalankan dialog pasca turun tangga pada latar hitam pekat (SCENE 5)
 		await DialogueManager.start_dialogue(downstairs_dialogue)
 		
-		# Kembali ke main menu setelah kengerian selesai
-		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+		# Lanjutkan ke ending plot twist
+		get_tree().change_scene_to_file("res://scenes/ending.tscn")
 	else:
 		# Jalankan dialog terkunci jika tidak punya kartu akses
 		await DialogueManager.start_dialogue(stairs_dialogue)

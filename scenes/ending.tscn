@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ending.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/images/ruangan/rku pagi.png" id="2_bg"]
+
+[node name="EndingScene" type="Control"]
+script = ExtResource("1_script")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+expand_mode = 1
+stretch_mode = 2
+texture = ExtResource("2_bg")
+
+[node name="FlashOverlay" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(1, 1, 1, 0)
+
+[node name="EyelidTop" type="ColorRect" parent="."]
+rect_position = Vector2(0, 0)
+rect_size = Vector2(576, 192)
+color = Color(0, 0, 0, 1)
+
+[node name="EyelidBottom" type="ColorRect" parent="."]
+rect_position = Vector2(0, 192)
+rect_size = Vector2(576, 192)
+color = Color(0, 0, 0, 1)

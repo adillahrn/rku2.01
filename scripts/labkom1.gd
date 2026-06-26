@@ -46,7 +46,7 @@ var scare_system_dialogue: Array[Dictionary] = [
 ]
 
 func _ready() -> void:
-	AudioManager.play_bgm("res://assets/music/bgm_luminous_time.mp3")
+	AudioManager.play_bgm("res://assets/music/bgm_scare_tension3.mp3")
 	self.modulate = Color(0.8, 0.8, 0.95)
 	
 	# Instance Player dari koridor
