@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/opening_cutscene.gd" id="1_yjqpq"]
 [ext_resource type="FontFile" path="res://assets/fonts/Nintendo-DS-BIOS-vasified.ttf" id="2_4bx60"]
 [ext_resource type="Texture2D" uid="uid://e8e5e413msdi" path="res://assets/images/ui/mail.png" id="3_mail"]
+[ext_resource type="AudioStreamMP3" uid="uid://blkmkpv6qc2e3" path="res://assets/music/typewriter.mp3" id="4_typewriter"]
 
 [node name="OpeningCutscene" type="Control"]
 layout_mode = 3
@@ -53,6 +54,10 @@ layout_mode = 2
 texture = ExtResource("3_mail")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="TypewriterSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_typewriter")
+volume_db = -5.0
 
 [node name="FadeOverlay" type="ColorRect" parent="."]
 layout_mode = 1
