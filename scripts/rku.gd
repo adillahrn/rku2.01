@@ -7,6 +7,7 @@ extends Node2D
 var is_flickering: bool = true
 var camera_follow_player: bool = false
 var interact_prompt: Sprite2D = null
+var quest_ui = null
 
 # dialog opening Arga
 var dialogue_lines: Array[Dictionary] = [
@@ -34,6 +35,12 @@ func _ready() -> void:
 	
 	# inisialisasi petunjuk interaksi pintu keluar
 	create_interact_prompt()
+	
+	# Inisialisasi QuestUI
+	var quest_ui_scene = load("res://scenes/quest_ui.tscn")
+	if quest_ui_scene:
+		quest_ui = quest_ui_scene.instantiate()
+		add_child(quest_ui)
 	
 	# set baseline environment redup kebiruan pas start
 	self.modulate = Color(0.8, 0.8, 0.95)
@@ -80,6 +87,10 @@ func _ready() -> void:
 	
 	# trigger dialogue pembuka
 	await DialogueManager.start_dialogue(dialogue_lines)
+	
+	# Set quest keluar dari kelas
+	if quest_ui:
+		quest_ui.set_quest("☐ Keluar dari kelas")
 	
 	# matiin lampu kedap kedip, set lampu ke redup kebiruan yang konstan (baseline)
 	is_flickering = false

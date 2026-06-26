@@ -4,6 +4,7 @@ var player: Player = null
 var camera: Camera2D = null
 var fade_rect: ColorRect = null
 var interact_prompt: Sprite2D = null
+var quest_ui = null
 
 func _ready() -> void:
 	# Set baseline environment redup kebiruan pas start
@@ -49,11 +50,21 @@ func _ready() -> void:
 	# Inisialisasi petunjuk interaksi pintu labkom
 	create_interact_prompt()
 	
+	# Inisialisasi QuestUI
+	var quest_ui_scene = load("res://scenes/quest_ui.tscn")
+	if quest_ui_scene:
+		quest_ui = quest_ui_scene.instantiate()
+		add_child(quest_ui)
+	
 	# Transisi masuk: Fade in selama 1.0 detik
 	var fade_tween = create_tween()
 	fade_tween.tween_property(fade_rect, "color", Color(0, 0, 0, 0), 1.0)
 	await fade_tween.finished
 	fade_rect.visible = false
+	
+	# Set quest masuk ke Labkom
+	if quest_ui:
+		quest_ui.set_quest("☐ Masuk ke Labkom")
 	
 	# Balikin kontrol gerak ke player
 	if is_instance_valid(player):
