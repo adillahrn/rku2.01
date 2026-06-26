@@ -91,4 +91,4 @@ func start_transition() -> void:
 	fade_tween.tween_property(fade_overlay, "color", Color(0, 0, 0, 1), 1.5)
 	await fade_tween.finished
 	
-	get_tree().change_scene_to_file("res://scenes/game.tscn")
+	get_tree().change_scene_to_file("res://scenes/rku.tscn")
