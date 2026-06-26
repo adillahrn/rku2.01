@@ -3,6 +3,7 @@ extends Node2D
 var player: Player = null
 var camera: Camera2D = null
 var fade_rect: ColorRect = null
+var interact_prompt: Sprite2D = null
 
 func _ready() -> void:
 	# Set baseline environment redup kebiruan pas start
@@ -14,6 +15,7 @@ func _ready() -> void:
 		player = player_scene.instantiate()
 		player.position = Vector2(60, 240) # Posisi keluar dari pintu RKU di kiri
 		player.has_bag = DialogueManager.player_has_bag
+		player.has_key = DialogueManager.player_has_key
 		add_child(player)
 		player.can_move = false # Kunci kontrol sementara pas transition masuk
 		
@@ -44,6 +46,9 @@ func _ready() -> void:
 	# Inisialisasi padding
 	setup_boundaries()
 	
+	# Inisialisasi petunjuk interaksi pintu labkom
+	create_interact_prompt()
+	
 	# Transisi masuk: Fade in selama 1.0 detik
 	var fade_tween = create_tween()
 	fade_tween.tween_property(fade_rect, "color", Color(0, 0, 0, 0), 1.0)
@@ -57,6 +62,22 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if is_instance_valid(player):
 		camera.position = player.position
+		
+	# Update visibility petunjuk interaksi pintu keluar ke Labkom
+	if is_instance_valid(player) and player.can_move and not DialogueManager.is_dialogue_active:
+		var target_pos = Vector2(200, 230)
+		if player.position.distance_to(target_pos) <= 25.0:
+			if interact_prompt:
+				interact_prompt.visible = true
+				# Animasi melayang naik-turun halus (micro-animation)
+				var time = Time.get_ticks_msec() / 1000.0
+				interact_prompt.position.y = 180.0 + sin(time * 5.0) * 3.0
+		else:
+			if interact_prompt:
+				interact_prompt.visible = false
+	else:
+		if interact_prompt:
+			interact_prompt.visible = false
 
 func setup_boundaries() -> void:
 	# Ukuran koridor 1056x384. Batas atas jalan koridor disesuaikan agar tidak menembus dinding atas (y=210)
@@ -103,3 +124,39 @@ func setup_boundaries() -> void:
 	bottom_segment.b = Vector2(right, bottom)
 	bottom_shape.shape = bottom_segment
 	boundaries.add_child(bottom_shape)
+
+func create_interact_prompt() -> void:
+	interact_prompt = Sprite2D.new()
+	var tex = load("res://assets/images/ui/enter room.png")
+	if tex:
+		interact_prompt.texture = tex
+	# Posisikan sedikit di atas pintu LABKOM
+	interact_prompt.position = Vector2(200, 180)
+	interact_prompt.visible = false
+	add_child(interact_prompt)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not is_instance_valid(player) or not player.can_move or DialogueManager.is_dialogue_active:
+		return
+		
+	var is_interact = false
+	if event.is_action_pressed("interact") or event.is_action_pressed("ui_accept"):
+		is_interact = true
+	elif event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_E or event.keycode == KEY_ENTER or event.keycode == KEY_SPACE:
+			is_interact = true
+			
+	if is_interact:
+		var target_pos = Vector2(200, 230)
+		if player.position.distance_to(target_pos) <= 25.0:
+			get_viewport().set_input_as_handled()
+			enter_labkom()
+
+func enter_labkom() -> void:
+	player.can_move = false
+	if fade_rect:
+		fade_rect.visible = true
+		var fade_tween = create_tween()
+		fade_tween.tween_property(fade_rect, "color", Color(0, 0, 0, 1), 1.0)
+		await fade_tween.finished
+	get_tree().change_scene_to_file("res://scenes/labkom.tscn")

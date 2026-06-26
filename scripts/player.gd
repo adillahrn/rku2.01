@@ -4,6 +4,7 @@ class_name Player extends CharacterBody2D
 @export var run_speed: float = 170.0
 @export var anim_fps: float = 8.0
 @export var has_bag: bool = false
+@export var has_key: bool = false
 
 @onready var sprite: Sprite2D = $Sprite2D
 
