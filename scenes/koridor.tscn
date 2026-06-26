@@ -6,6 +6,7 @@
 texture = ExtResource("1_c4lnp")
 0:13/size_in_atlas = Vector2i(18, 11)
 0:13/0 = 0
+0:13/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:10/size_in_atlas = Vector2i(6, 2)
 0:10/0 = 0
 0:10/0/physics_layer_0/polygon_0/points = PackedVector2Array(-49.6737, -15.21257, 47.810936, -16.764874, 47.190018, 15.833496, -47.500473, 15.21257)

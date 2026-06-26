@@ -111,4 +111,3 @@ func _animate(delta: float) -> void:
 		if frame_index >= sprite.hframes:
 			frame_index = 0.0
 		sprite.frame = int(frame_index)
-
