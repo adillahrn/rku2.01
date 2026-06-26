@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://iiqmg8v2tm3g"]
+[gd_scene format=4 uid="uid://iiqmg8v2tm3g"]
 
 [ext_resource type="Texture2D" uid="uid://dogt8tqcm6ep7" path="res://assets/images/ruangan/labkomfulfinall.png" id="1_ig88o"]
 [ext_resource type="Texture2D" uid="uid://wh6og8ldnpcv" path="res://assets/images/ruangan/tilemap labkom.png" id="2_maqd2"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_maqd2"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ig88o"]
 texture = ExtResource("2_maqd2")
 texture_region_size = Vector2i(30, 19)
 20:4/0 = 0
@@ -216,13 +216,22 @@ texture_region_size = Vector2i(30, 19)
 35:16/0 = 0
 2:0/size_in_atlas = Vector2i(2, 4)
 2:0/0 = 0
+2:0/0/y_sort_origin = -10
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-28.740496, -15.7722225, 29.79198, -15.42173, 28.740498, 0.35049438, 25.06031, 24.008827, 20.328644, 24.359322, 15.772224, 24.359322, 9.63858, 26.287037, 8.937595, 32.94642, -1.8627625, 36.013435, -10.245197, 31.356522, -13.660263, 19.559021, -25.410805, 25.936546, -23.30784, 24.534569, -28.390001, 26.11179)
 4:0/size_in_atlas = Vector2i(2, 4)
 4:0/0 = 0
+4:0/0/y_sort_origin = -10
+4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-28.740496, -15.7722225, 29.79198, -15.42173, 28.740498, 0.35049438, 25.06031, 24.008827, 20.328644, 24.359322, 15.772224, 24.359322, 9.63858, 26.287037, 8.937595, 32.94642, -1.8627625, 36.013435, -10.245197, 31.356522, -13.660263, 19.559021, -25.410805, 25.936546, -23.30784, 24.534569, -28.390001, 26.11179)
 6:0/size_in_atlas = Vector2i(1, 5)
 6:0/0 = 0
+6:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-14.281185, 25.768234, 13.349808, 15.21257, 13.349808, 19.559021, 13.349808, 21.421783, 13.970734, 22.353165, 14.281189, 27.010078, 7.7615204, 32.598366, 4.035988, 34.150673, 0.31046295, 37.565735, -12.418423, 47.810936, -13.349804, 47.190018, -11.797501, 39.118042, -13.039345, 41.601723, -12.728882, 34.150673)
+0:9/size_in_atlas = Vector2i(19, 5)
+0:9/0 = 0
+0:9/0/physics_layer_0/polygon_0/points = PackedVector2Array(69.17946, -52.615387, 199.74355, -68.205124, 249.43584, -66.25641, 264.09882, -50.057922, 283.0863, -50.057922, 286.53857, 12.082977, 286.53857, 32.7966, 289.99084, 46.605682, 221.17943, 45.79486, 13.349808, 45.948174, 3.1046066, 45.63771, -12.418423, 47.810936, -42.843563, 46.56909, -283.08633, 46.605682, -284.81247, -60.414734, -20.461548, -61.384613)
 
-[sub_resource type="TileSet" id="TileSet_fj317"]
-sources/1 = SubResource("TileSetAtlasSource_maqd2")
+[sub_resource type="TileSet" id="TileSet_maqd2"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_ig88o")
 
 [node name="Labkom" type="Node2D" unique_id=1353750745]
 
@@ -234,8 +243,8 @@ position = Vector2(288.875, 192.25)
 scale = Vector2(1.0039063, 1.0039063)
 texture = ExtResource("1_ig88o")
 
-[node name="TileMap" type="TileMap" parent="." unique_id=1616180354]
-position = Vector2(11, 0)
-tile_set = SubResource("TileSet_fj317")
-format = 2
-layer_0/tile_data = PackedInt32Array(655392, 131073, 0, 655388, 131073, 0, 655384, 131073, 0, 655374, 131073, 0, 655370, 131073, 0, 655366, 131073, 0, 655362, 131073, 0, 1048596, 131073, 0, 1048600, 131073, 0, 1048604, 131073, 0, 1048608, 131073, 0, 1048590, 131073, 0, 1048586, 131073, 0, 1048582, 131073, 0, 1048578, 131073, 0, 1376288, 131073, 0, 1376284, 131073, 0, 1376280, 131073, 0, 1376276, 131073, 0, 1376270, 131073, 0, 1376266, 131073, 0, 1376262, 131073, 0, 1376258, 131073, 0, 655380, 262145, 0, 262178, 393217, 0)
+[node name="Object" type="TileMapLayer" parent="." unique_id=1372924749]
+y_sort_enabled = true
+position = Vector2(11, -9)
+tile_map_data = PackedByteArray("AAAgAAoAAAACAAAAAAAcAAoAAAACAAAAAAAYAAoAAAACAAAAAAAOAAoAAAACAAAAAAAKAAoAAAACAAAAAAAGAAoAAAACAAAAAAACAAoAAAACAAAAAAAgABAAAAACAAAAAAAcABAAAAACAAAAAAAYABAAAAACAAAAAAAUABAAAAACAAAAAAAOABAAAAACAAAAAAAKABAAAAACAAAAAAAGABAAAAACAAAAAAACABAAAAACAAAAAAAgABUAAAACAAAAAAAcABUAAAACAAAAAAAYABUAAAACAAAAAAAUABUAAAACAAAAAAAOABUAAAACAAAAAAAKABUAAAACAAAAAAAGABUAAAACAAAAAAACABUAAAACAAAAAAAUAAoAAAAEAAAAAAARAAMAAAAAAAkAAAAiAAQAAAAGAAAAAAA=")
+tile_set = SubResource("TileSet_maqd2")
