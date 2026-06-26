@@ -59,6 +59,7 @@ position = Vector2(288, 192)
 position = Vector2(360, 260)
 
 [node name="ScreenEffects" type="CanvasLayer" parent="." unique_id=1832673733]
+visible = false
 
 [node name="FadeRect" type="ColorRect" parent="ScreenEffects" unique_id=387396411]
 anchors_preset = 15
