@@ -6,7 +6,8 @@ extends Node2D
 
 var is_flickering: bool = true
 var camera_follow_player: bool = false
-var interact_prompt: Label = null
+var interact_prompt: Sprite2D = null
+var quest_ui = null
 
 # dialog opening Arga
 var dialogue_lines: Array[Dictionary] = [
@@ -34,6 +35,12 @@ func _ready() -> void:
 	
 	# inisialisasi petunjuk interaksi pintu keluar
 	create_interact_prompt()
+	
+	# Inisialisasi QuestUI
+	var quest_ui_scene = load("res://scenes/quest_ui.tscn")
+	if quest_ui_scene:
+		quest_ui = quest_ui_scene.instantiate()
+		add_child(quest_ui)
 	
 	# set baseline environment redup kebiruan pas start
 	self.modulate = Color(0.8, 0.8, 0.95)
@@ -81,6 +88,10 @@ func _ready() -> void:
 	# trigger dialogue pembuka
 	await DialogueManager.start_dialogue(dialogue_lines)
 	
+	# Set quest keluar dari kelas
+	if quest_ui:
+		quest_ui.set_quest("☐ Keluar dari kelas")
+	
 	# matiin lampu kedap kedip, set lampu ke redup kebiruan yang konstan (baseline)
 	is_flickering = false
 	self.modulate = Color(0.8, 0.8, 0.95)
@@ -98,8 +109,7 @@ func _process(_delta: float) -> void:
 		
 	# Update visibility petunjuk interaksi pintu keluar
 	if is_instance_valid(player) and player.can_move and not DialogueManager.is_dialogue_active:
-		var exit_pos = Vector2(576, 158)
-		if player.position.distance_to(exit_pos) <= 25.0:
+		if abs(player.position.x - 576.0) <= 25.0 and player.position.y >= 133.0 and player.position.y <= 200.0:
 			if interact_prompt:
 				interact_prompt.visible = true
 				# Animasi melayang naik-turun halus (micro-animation)
@@ -185,14 +195,12 @@ func setup_screen_boundaries() -> void:
 
 
 func create_interact_prompt() -> void:
-	interact_prompt = Label.new()
-	interact_prompt.text = "[E] Keluar"
-	var font = load("res://assets/fonts/Nintendo-DS-BIOS-vasified.ttf")
-	if font:
-		interact_prompt.add_theme_font_override("font", font)
-	interact_prompt.add_theme_font_size_override("font_size", 16)
-	# Posisikan sedikit di sebelah kiri dari titik 576, 158 agar terbaca di layar
-	interact_prompt.position = Vector2(510, 125)
+	interact_prompt = Sprite2D.new()
+	var tex = load("res://assets/images/ui/enter room.png")
+	if tex:
+		interact_prompt.texture = tex
+	# Posisikan sedikit di atas pintu
+	interact_prompt.position = Vector2(550, 130)
 	interact_prompt.visible = false
 	add_child(interact_prompt)
 
@@ -209,19 +217,18 @@ func _unhandled_input(event: InputEvent) -> void:
 			is_interact = true
 			
 	if is_interact:
-		var exit_pos = Vector2(576, 158)
-		if player.position.distance_to(exit_pos) <= 25.0:
+		if abs(player.position.x - 576.0) <= 25.0 and player.position.y >= 133.0 and player.position.y <= 200.0:
 			get_viewport().set_input_as_handled()
 			exit_classroom()
 
 
 func exit_classroom() -> void:
 	player.can_move = false
+	DialogueManager.player_has_bag = player.has_bag
+	DialogueManager.player_has_key = player.has_key
 	if fade_rect:
 		fade_rect.visible = true
 		var fade_tween = create_tween()
 		fade_tween.tween_property(fade_rect, "color", Color(0, 0, 0, 1), 1.0)
 		await fade_tween.finished
 	get_tree().change_scene_to_file("res://scenes/koridor.tscn")
-
-
