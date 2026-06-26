@@ -3,10 +3,10 @@ extends CanvasLayer
 signal computer_closed
 signal access_card_obtained
 
-enum State { WELCOME, AUTH, QUIZ_1, QUIZ_2, QUIZ_3, LOADING, SUCCESS, FAILURE, MYSTERY }
+enum State { WELCOME, LOGIN, LOADING_PASSWORD, QUIZ_1, QUIZ_2, QUIZ_3, LOADING_QUIZ, SUCCESS, FAILURE }
 
 var current_state: State = State.WELCOME
-var current_question: int = 0
+var password_correct: bool = false
 var score: int = 0
 
 var questions: Array[Dictionary] = [
@@ -40,6 +40,7 @@ var choice_container: VBoxContainer
 var action_btn: Button
 var loading_img: TextureRect
 var lock_img: TextureRect
+var password_input: LineEdit
 
 func _ready() -> void:
 	visible = false
@@ -55,6 +56,7 @@ func _ready() -> void:
 		choice_container = window_content.get_node_or_null("Body/ChoiceContainer")
 		loading_img = window_content.get_node_or_null("Body/LoadingImg")
 		lock_img = window_content.get_node_or_null("Body/LockImg")
+		password_input = window_content.get_node_or_null("Body/PasswordInput")
 		action_btn = window_content.get_node_or_null("ActionBtn")
 	else:
 		win_title = find_child("TitleLabel", true, false) as Label
@@ -64,6 +66,7 @@ func _ready() -> void:
 		choice_container = find_child("ChoiceContainer", true, false) as VBoxContainer
 		loading_img = find_child("LoadingImg", true, false) as TextureRect
 		lock_img = find_child("LockImg", true, false) as TextureRect
+		password_input = find_child("PasswordInput", true, false) as LineEdit
 		action_btn = find_child("ActionBtn", true, false) as Button
 
 	if not win_title:
@@ -77,14 +80,26 @@ func _ready() -> void:
 
 	if action_btn:
 		action_btn.pressed.connect(_on_action_btn_pressed)
+		
+	if password_input:
+		# Style the password LineEdit input box retro
+		var normal_sb = _create_retro_stylebox(Color(0.85, 0.85, 0.9), Color(0.3, 0.3, 0.4))
+		password_input.add_theme_stylebox_override("normal", normal_sb)
+		var font = load("res://assets/fonts/Nintendo-DS-BIOS-vasified.ttf")
+		if font:
+			password_input.add_theme_font_override("font", font)
+		password_input.add_theme_font_size_override("font_size", 18)
+		password_input.text_submitted.connect(_on_password_submitted)
 
 func open() -> void:
 	score = 0
+	password_correct = false
 	visible = true
 	_show_state(State.WELCOME)
 
 func close() -> void:
 	visible = false
+	print("[DEBUG COMPUTER] close() called. Emitting computer_closed.")
 	computer_closed.emit()
 
 func _create_retro_stylebox(bg_color: Color, border_color: Color) -> StyleBoxFlat:
@@ -113,6 +128,8 @@ func _show_state(state: State) -> void:
 	if sub_text:
 		sub_text.visible = false
 		sub_text.modulate = Color(0.05, 0.05, 0.15) # Dark color for light theme subtext
+	if password_input:
+		password_input.visible = false
 	if choice_container:
 		choice_container.visible = false
 	if action_btn:
@@ -124,7 +141,7 @@ func _show_state(state: State) -> void:
 
 	# Setup background and action button theme based on State category (Light/Dark theme)
 	match state:
-		State.WELCOME, State.AUTH, State.QUIZ_1, State.QUIZ_2, State.QUIZ_3, State.LOADING:
+		State.WELCOME, State.LOGIN, State.LOADING_PASSWORD, State.QUIZ_1, State.QUIZ_2, State.QUIZ_3, State.LOADING_QUIZ:
 			if bg_dark:
 				bg_dark.visible = false
 			if bg_light:
@@ -142,7 +159,7 @@ func _show_state(state: State) -> void:
 				action_btn.add_theme_color_override("font_hover_color", Color(0.0, 0.0, 0.2))
 				action_btn.add_theme_color_override("font_pressed_color", Color(0.0, 0.0, 0.0))
 				action_btn.add_theme_color_override("font_focus_color", Color(0.05, 0.05, 0.15))
-		State.SUCCESS, State.FAILURE, State.MYSTERY:
+		State.SUCCESS, State.FAILURE:
 			if bg_dark:
 				bg_dark.visible = true
 			if bg_light:
@@ -170,14 +187,32 @@ func _show_state(state: State) -> void:
 			if action_btn:
 				action_btn.visible = true
 				action_btn.text = "Continue >"
-		State.AUTH:
+		State.LOGIN:
+			score = 0
 			if win_title:
-				win_title.text = "Authentication System"
+				win_title.text = "System Authentication"
 			if body_text:
-				body_text.text = "Student Verification Required\n\nComplete the challenge to unlock\nemergency exit access."
+				body_text.text = "Student verification required.\nPlease enter password:"
+			if password_input:
+				password_input.visible = true
+				password_input.text = ""
+				password_input.grab_focus()
 			if action_btn:
 				action_btn.visible = true
-				action_btn.text = "START VERIFICATION"
+				action_btn.text = "SUBMIT"
+		State.LOADING_PASSWORD:
+			if win_title:
+				win_title.text = "System Authentication"
+			if body_text:
+				body_text.text = "Verifying password...\n\nPlease wait..."
+			if loading_img:
+				loading_img.visible = true
+				_run_loading_password()
+			else:
+				if password_correct:
+					_show_state(State.QUIZ_1)
+				else:
+					_show_state(State.FAILURE)
 		State.QUIZ_1, State.QUIZ_2, State.QUIZ_3:
 			var q_idx = state - State.QUIZ_1
 			var q = questions[q_idx]
@@ -188,36 +223,30 @@ func _show_state(state: State) -> void:
 			if choice_container:
 				choice_container.visible = true
 				_build_choices(q["choices"], q["correct"])
-		State.LOADING:
+		State.LOADING_QUIZ:
 			if win_title:
-				win_title.text = "Authentication System"
+				win_title.text = "System Authentication"
 			if body_text:
-				body_text.text = "Verifying answers...\n\nPlease wait..."
+				body_text.text = "Checking verification answers...\n\nPlease wait..."
 			if loading_img:
 				loading_img.visible = true
-				_run_loading()
+				_run_loading_quiz()
 			else:
-				if score == 3:
+				if score >= 3:
 					_show_state(State.SUCCESS)
 				else:
 					_show_state(State.FAILURE)
 		State.SUCCESS:
 			if win_title:
-				win_title.text = "Authentication System"
+				win_title.text = "FMIPA System Terminal"
 				win_title.modulate = Color(0.2, 1.0, 0.3)
 			if body_text:
 				body_text.modulate = Color(0.2, 1.0, 0.3)
-				body_text.text = "EMERGENCY EXIT\nACCESS GRANTED"
-			if lock_img:
-				lock_img.visible = true
-				lock_img.modulate = Color(1, 1, 1) # Keep lock icon original green
-			if sub_text:
-				sub_text.visible = true
-				sub_text.modulate = Color(0.2, 1.0, 0.3)
-				sub_text.text = "Access card has been generated.\nPlease take it from the card reader."
+				body_text.text = "I'm always behind you.\nYou must be faster.\nYou're almost late."
 			if action_btn:
 				action_btn.visible = true
-				action_btn.text = "Continue >"
+				action_btn.text = "Close"
+			print("[DEBUG COMPUTER] State SUCCESS reached. Emitting access_card_obtained.")
 			access_card_obtained.emit()
 		State.FAILURE:
 			if win_title:
@@ -225,27 +254,24 @@ func _show_state(state: State) -> void:
 				win_title.modulate = Color(0.2, 1.0, 0.3)
 			if body_text:
 				body_text.modulate = Color(0.2, 1.0, 0.3)
-				body_text.text = "EMERGENCY EXIT\nACCESS DENIED"
+				body_text.text = "VERIFICATION FAILED\n\nAccess Denied.\nIncorrect credentials detected."
 			if lock_img:
 				lock_img.visible = true
 				lock_img.modulate = Color(1.0, 0.3, 0.3) # Modulate lock to red on failure!
-			if sub_text:
-				sub_text.visible = true
-				sub_text.modulate = Color(0.2, 1.0, 0.3)
-				sub_text.text = "Verification failed.\nIncorrect answers detected."
 			if action_btn:
 				action_btn.visible = true
 				action_btn.text = "Retry"
-		State.MYSTERY:
-			if win_title:
-				win_title.text = "System Message"
-				win_title.modulate = Color(0.2, 1.0, 0.3)
-			if body_text:
-				body_text.modulate = Color(0.2, 1.0, 0.3)
-				body_text.text = "You found me.\n\n-"
-			if action_btn:
-				action_btn.visible = true
-				action_btn.text = "Close"
+
+func _on_password_submitted(text: String) -> void:
+	if current_state == State.LOGIN:
+		_submit_password(text)
+
+func _submit_password(text: String) -> void:
+	if text.strip_edges().to_lower() == "student":
+		password_correct = true
+	else:
+		password_correct = false
+	_show_state(State.LOADING_PASSWORD)
 
 func _build_choices(choices: Array, correct_idx: int) -> void:
 	for child in choice_container.get_children():
@@ -287,11 +313,29 @@ func _on_choice_pressed(chosen: int, correct: int) -> void:
 	match current_state:
 		State.QUIZ_1: _show_state(State.QUIZ_2)
 		State.QUIZ_2: _show_state(State.QUIZ_3)
-		State.QUIZ_3: _show_state(State.LOADING)
+		State.QUIZ_3: _show_state(State.LOADING_QUIZ)
 
-func _run_loading() -> void:
+func _run_loading_password() -> void:
 	if not loading_img:
-		if score == 3:
+		if password_correct:
+			_show_state(State.QUIZ_1)
+		else:
+			_show_state(State.FAILURE)
+		return
+
+	# Spin animation on loading image via rotation
+	var start_rotation = loading_img.rotation_degrees
+	var tween = create_tween().set_loops(4)
+	tween.tween_property(loading_img, "rotation_degrees", start_rotation + 360.0, 0.5)
+	await tween.finished
+	if password_correct:
+		_show_state(State.QUIZ_1)
+	else:
+		_show_state(State.FAILURE)
+
+func _run_loading_quiz() -> void:
+	if not loading_img:
+		if score >= 3:
 			_show_state(State.SUCCESS)
 		else:
 			_show_state(State.FAILURE)
@@ -302,7 +346,7 @@ func _run_loading() -> void:
 	var tween = create_tween().set_loops(4)
 	tween.tween_property(loading_img, "rotation_degrees", start_rotation + 360.0, 0.5)
 	await tween.finished
-	if score == 3:
+	if score >= 3:
 		_show_state(State.SUCCESS)
 	else:
 		_show_state(State.FAILURE)
@@ -310,13 +354,11 @@ func _run_loading() -> void:
 func _on_action_btn_pressed() -> void:
 	match current_state:
 		State.WELCOME:
-			_show_state(State.AUTH)
-		State.AUTH:
-			_show_state(State.QUIZ_1)
+			_show_state(State.LOGIN)
+		State.LOGIN:
+			if password_input:
+				_submit_password(password_input.text)
 		State.SUCCESS:
-			_show_state(State.MYSTERY)
-		State.FAILURE:
-			score = 0
-			_show_state(State.AUTH)
-		State.MYSTERY:
 			close()
+		State.FAILURE:
+			_show_state(State.LOGIN)

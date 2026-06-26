@@ -90,7 +90,7 @@ func _ready() -> void:
 	
 	# Set quest keluar dari kelas
 	if quest_ui:
-		quest_ui.set_quest("☐ Keluar dari kelas")
+		quest_ui.set_quest("☐ Leave the classroom")
 	
 	# matiin lampu kedap kedip, set lampu ke redup kebiruan yang konstan (baseline)
 	is_flickering = false
@@ -126,16 +126,20 @@ func flicker_lights() -> void:
 	while is_flickering:
 		# nunggu waktu random sebelum lampu kedip lagi
 		await get_tree().create_timer(randf_range(0.4, 1.5)).timeout
-		if not is_flickering:
+		if not is_flickering or not is_instance_valid(self):
 			break
 			
 		# kedip dua kali (redupin terus balikin ke redup kebiruan baseline)
+		if not is_instance_valid(self): return
 		self.modulate = Color(0.5, 0.5, 0.65)
 		await get_tree().create_timer(0.06).timeout
+		if not is_instance_valid(self): return
 		self.modulate = Color(0.8, 0.8, 0.95)
 		await get_tree().create_timer(0.05).timeout
+		if not is_instance_valid(self): return
 		self.modulate = Color(0.5, 0.5, 0.65)
 		await get_tree().create_timer(0.08).timeout
+		if not is_instance_valid(self): return
 		self.modulate = Color(0.8, 0.8, 0.95)
 
 
