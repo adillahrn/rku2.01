@@ -5,7 +5,7 @@
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ig88o"]
 texture = ExtResource("2_maqd2")
-texture_region_size = Vector2i(30, 19)
+texture_region_size = Vector2i(16, 16)
 20:4/0 = 0
 21:4/0 = 0
 22:4/0 = 0
