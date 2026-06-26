@@ -9,18 +9,30 @@ var labkom_prompt: Sprite2D = null
 var stairs_prompt: Sprite2D = null
 var quest_ui = null
 var corridor_quest_stage: int = 0
+var is_flickering: bool = true
 
 var stairs_dialogue: Array[Dictionary] = [
-	{"speaker": "Arga", "expression": "confused", "text": "Pintu ke tangga darurat terkunci... Butuh kartu akses untuk membukanya."},
-	{"speaker": "Arga", "expression": "mikir", "text": "Aku harus mencari kartu akses di dalam Labkom..."}
+	{"speaker": "Arga", "expression": "confused", "text": "Locked."},
+	{"speaker": "Arga", "expression": "mikir", "text": "Looks like it needs an access card."}
 ]
 
 var stairs_success_dialogue: Array[Dictionary] = [
-	{"speaker": "Arga", "expression": "mikir", "text": "Pintu terbuka! Aku akhirnya bisa keluar dari gedung ini!"}
+	{"speaker": "Arga", "expression": "mikir", "text": "The emergency stairs door is unlocked. Time to go downstairs."}
 ]
 
 var rku_dialogue: Array[Dictionary] = [
-	{"speaker": "Arga", "expression": "mikir", "text": "Pintunya sudah terkunci otomatis... Aku tidak perlu kembali ke dalam kelas."}
+	{"speaker": "Arga", "expression": "mikir", "text": "The classroom door is locked automatically... I can't go back."}
+]
+
+var downstairs_dialogue: Array[Dictionary] = [
+	{"speaker": "System", "expression": "", "text": "[Arga unlocks the door and walks down the cold, creaking stairs... The air becomes heavy and damp.]"},
+	{"speaker": "Arga", "expression": "sedih", "text": "Ugh... it's even darker down here. The rain is leaking from the ceiling..."},
+	{"speaker": "System", "expression": "", "text": "[On the wall, a faded poster reads: 'GKV Presentation Tomorrow - 07:30 AM']"},
+	{"speaker": "Arga", "expression": "confused", "text": "Tomorrow?"},
+	{"speaker": "Arga", "expression": "mikir", "text": "Wait... today was the presentation day... right?"},
+	{"speaker": "Lecturer", "expression": "", "text": "\"Arga... is your revision finished yet?\""},
+	{"speaker": "Arga", "expression": "sedih", "text": "...?! Who's there?!"},
+	{"speaker": "System", "expression": "", "text": "[But the corridor remains completely empty. Only the distant echo of rain remains.]"}
 ]
 
 func _ready() -> void:
@@ -77,12 +89,11 @@ func _ready() -> void:
 		quest_ui = quest_ui_scene.instantiate()
 		add_child(quest_ui)
 		
-		# Jika player sudah membawa kartu akses dari labkom1
+		# Set Quest awal berdasarkan status access card
 		if DialogueManager.player_has_key:
-			quest_ui.set_quest("[s]☐ Cari kartu akses[/s]\n☐ Buka tangga darurat")
+			quest_ui.set_quest("[s]☐ Find access card in LABKOM 3[/s]\n☐ Open the emergency stairs")
 		else:
-			# Jika player baru saja memulai koridor
-			quest_ui.set_quest("☐ Cari jalan keluar")
+			quest_ui.set_quest("☐ Find a way downstairs.")
 	
 	# Transisi masuk: Fade in selama 1.0 detik
 	var fade_tween = create_tween()
@@ -90,9 +101,65 @@ func _ready() -> void:
 	await fade_tween.finished
 	fade_rect.visible = false
 	
+	# Mulai Morse Code Lamp berkedip "LAB KOM 3" di lorong
+	flicker_morse()
+	
 	# Balikin kontrol gerak ke player
 	if is_instance_valid(player):
 		player.can_move = true
+
+func flicker_morse() -> void:
+	# Morse code for "LAB KOM 3"
+	# L: .-..  A: .-  B: -...
+	# K: -.-   O: ---  M: --
+	# 3: ...--
+	var sequence = [
+		# L: .-..
+		"dot", "dash", "dot", "dot", "letter_space",
+		# A: .-
+		"dot", "dash", "letter_space",
+		# B: -...
+		"dash", "dot", "dot", "dot", "word_space",
+		# K: -.-
+		"dash", "dot", "dash", "letter_space",
+		# O: ---
+		"dash", "dash", "dash", "letter_space",
+		# M: --
+		"dash", "dash", "word_space",
+		# 3: ...--
+		"dot", "dot", "dot", "dash", "dash", "word_space"
+	]
+	
+	while is_flickering:
+		for action in sequence:
+			if not is_flickering or not is_instance_valid(self):
+				break
+			match action:
+				"dot":
+					if not is_instance_valid(self): return
+					self.modulate = Color(0.8, 0.8, 0.95)
+					await get_tree().create_timer(0.2).timeout
+					if not is_instance_valid(self): return
+					self.modulate = Color(0.45, 0.45, 0.55)
+					await get_tree().create_timer(0.2).timeout
+				"dash":
+					if not is_instance_valid(self): return
+					self.modulate = Color(0.8, 0.8, 0.95)
+					await get_tree().create_timer(0.6).timeout
+					if not is_instance_valid(self): return
+					self.modulate = Color(0.45, 0.45, 0.55)
+					await get_tree().create_timer(0.2).timeout
+				"letter_space":
+					if not is_instance_valid(self): return
+					self.modulate = Color(0.45, 0.45, 0.55)
+					await get_tree().create_timer(0.6).timeout
+				"word_space":
+					if not is_instance_valid(self): return
+					self.modulate = Color(0.45, 0.45, 0.55)
+					await get_tree().create_timer(1.4).timeout
+
+func _exit_tree() -> void:
+	is_flickering = false
 
 func _process(_delta: float) -> void:
 	if is_instance_valid(player):
@@ -253,22 +320,27 @@ func interact_with_stairs() -> void:
 	if DialogueManager.player_has_key:
 		# Jalankan dialog sukses jika punya kartu akses
 		await DialogueManager.start_dialogue(stairs_success_dialogue)
-		# Fade out ke hitam dan kembali ke main menu (karena game selesai)
+		# Fade out ke hitam (karena tangga dimulai)
 		if fade_rect:
 			fade_rect.visible = true
 			var fade_tween = create_tween()
 			fade_tween.tween_property(fade_rect, "color", Color(0, 0, 0, 1), 1.5)
 			await fade_tween.finished
+		
+		# Jalankan dialog pasca turun tangga pada latar hitam pekat (SCENE 5)
+		await DialogueManager.start_dialogue(downstairs_dialogue)
+		
+		# Kembali ke main menu setelah kengerian selesai
 		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 	else:
 		# Jalankan dialog terkunci jika tidak punya kartu akses
 		await DialogueManager.start_dialogue(stairs_dialogue)
 		
-		# Jika ini interaksi pertama, naikkan stage quest ke 1 (disuruh ke Labkom)
+		# Jika ini interaksi pertama, naikkan stage quest ke 1 (disuruh ke Labkom 3)
 		if corridor_quest_stage == 0:
 			corridor_quest_stage = 1
 			if quest_ui:
-				quest_ui.set_quest("☐ Masuk ke Labkom")
+				quest_ui.set_quest("☐ Find a way downstairs.\n☐ Find access card in LABKOM 3")
 				
 		# Lepaskan pergerakan player kembali
 		if is_instance_valid(player):
@@ -276,6 +348,7 @@ func interact_with_stairs() -> void:
 
 func enter_labkom() -> void:
 	player.can_move = false
+	is_flickering = false # Matikan lampu berkedip saat keluar scene
 	if fade_rect:
 		fade_rect.visible = true
 		var fade_tween = create_tween()

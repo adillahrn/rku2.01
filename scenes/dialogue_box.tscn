@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://7ewjkirly31w" path="res://assets/images/ui/confused.png" id="5_portrait"]
 
 [node name="DialogueBox" type="CanvasLayer" unique_id=1825989662]
+layer = 100
 script = ExtResource("1_yjqpq")
 
 [node name="Control" type="Control" parent="." unique_id=1680835443]
