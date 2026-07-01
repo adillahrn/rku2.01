@@ -1,5 +1,5 @@
 # RKU-201
-
+<img width="1252" height="822" alt="Screenshot 2026-07-01 114902" src="https://github.com/user-attachments/assets/263a02ff-5e14-4500-9d6d-2e19f3bc3e05" />
 RKU-201 adalah sebuah game petualangan/RPG interaktif berbasis 2D yang dikembangkan menggunakan **Godot Engine 4**. Pemain akan diajak untuk menjelajahi berbagai area kampus seperti Koridor, Lab Komputer (Labkom), dan Ruang Kuliah Umum (RKU), berinteraksi dengan berbagai karakter, dan menyelesaikan quest.
 
 ## 🌟 Fitur Utama
