@@ -12,7 +12,7 @@ var score: int = 0
 var questions: Array[Dictionary] = [
 	{
 		"title": "Question 1 / 3",
-		"text": "Which number is represented by 1001\u2082?",
+		"text": "Which number is represented by (1001)\u2082?",
 		"choices": ["A. 7", "B. 8", "C. 9", "D. 10"],
 		"correct": 2
 	},
@@ -41,11 +41,15 @@ var action_btn: Button
 var loading_img: TextureRect
 var lock_img: TextureRect
 var password_input: LineEdit
+var hover_sfx: AudioStreamPlayer
+var typing_sfx: AudioStreamPlayer
 
 func _ready() -> void:
 	visible = false
 	bg_light = get_node_or_null("BgLight")
 	bg_dark = get_node_or_null("BgDark")
+	hover_sfx = get_node_or_null("HoverSFX")
+	typing_sfx = get_node_or_null("TypingSFX")
 
 	var window_content = get_node_or_null("WindowContent")
 	if window_content:
@@ -80,6 +84,7 @@ func _ready() -> void:
 
 	if action_btn:
 		action_btn.pressed.connect(_on_action_btn_pressed)
+		action_btn.mouse_entered.connect(_on_button_mouse_entered)
 		
 	if password_input:
 		# Style the password LineEdit input box retro
@@ -90,6 +95,17 @@ func _ready() -> void:
 			password_input.add_theme_font_override("font", font)
 		password_input.add_theme_font_size_override("font_size", 18)
 		password_input.text_submitted.connect(_on_password_submitted)
+		password_input.text_changed.connect(_on_password_text_changed)
+
+func _on_button_mouse_entered() -> void:
+	if hover_sfx:
+		hover_sfx.pitch_scale = randf_range(0.9, 1.1)
+		hover_sfx.play()
+
+func _on_password_text_changed(_new_text: String) -> void:
+	if typing_sfx:
+		typing_sfx.pitch_scale = randf_range(0.8, 1.2)
+		typing_sfx.play()
 
 func open() -> void:
 	score = 0
@@ -306,6 +322,7 @@ func _build_choices(choices: Array, correct_idx: int) -> void:
 			btn.add_theme_font_override("font", font)
 		btn.add_theme_font_size_override("font_size", 18)
 		btn.pressed.connect(_on_choice_pressed.bind(i, correct_idx))
+		btn.mouse_entered.connect(_on_button_mouse_entered)
 		choice_container.add_child(btn)
 
 func _on_choice_pressed(chosen: int, correct: int) -> void:

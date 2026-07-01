@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://hodlnnvjts7q" path="res://assets/images/ui/loading.png" id="4_loading"]
 [ext_resource type="FontFile" uid="uid://8kby4rs5kyg8" path="res://assets/fonts/Nintendo-DS-BIOS-vasified.ttf" id="5_font"]
 [ext_resource type="Texture2D" uid="uid://cfmpjtrlqqg7x" path="res://assets/images/ui/lock.png" id="6_lock"]
+[ext_resource type="AudioStream" path="res://assets/music/button-hover.mp3" id="7_hover"]
+[ext_resource type="AudioStream" path="res://assets/music/typing.mp3" id="8_typing"]
 
 [node name="ComputerUI" type="CanvasLayer"]
 visible = false
@@ -118,3 +120,10 @@ theme_override_colors/font_color = Color(0.05, 0.05, 0.15, 1)
 theme_override_fonts/font = ExtResource("5_font")
 theme_override_font_sizes/font_size = 18
 text = "Continue >"
+
+[node name="HoverSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_hover")
+volume_db = 5.0
+
+[node name="TypingSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_typing")

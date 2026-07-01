@@ -17,6 +17,7 @@ const EXPRESSIONS = {
 @onready var text_label: RichTextLabel = $Control/DialoguePanel/TextLabel
 @onready var next_indicator: TextureRect = $Control/DialoguePanel/NextIndicator
 @onready var portrait_rect: TextureRect = $Control/Portrait
+@onready var typewriter_sfx: AudioStreamPlayer = $Control/TypewriterSFX
 
 var dialogue_lines: Array = []
 var current_line_index: int = 0
@@ -89,6 +90,13 @@ func show_line(line_data) -> void:
 	typing_tween = create_tween()
 	typing_tween.tween_property(text_label, "visible_ratio", 1.0, duration)
 	typing_tween.finished.connect(_on_typing_finished)
+	
+	if "Sound of typing" in text:
+		if typewriter_sfx and not typewriter_sfx.playing:
+			typewriter_sfx.play(5.0)
+	elif "The typing stops" in text:
+		if typewriter_sfx and typewriter_sfx.playing:
+			typewriter_sfx.stop()
 
 func _on_typing_finished() -> void:
 	is_typing = false
@@ -108,6 +116,8 @@ func advance() -> void:
 		else:
 			if typing_tween and typing_tween.is_valid():
 				typing_tween.kill()
+			if typewriter_sfx and typewriter_sfx.playing:
+				typewriter_sfx.stop()
 			dialogue_finished.emit()
 
 func _process(_delta: float) -> void:

@@ -340,6 +340,9 @@ func interact_with_stairs() -> void:
 		# Lanjutkan ke ending plot twist
 		get_tree().change_scene_to_file("res://scenes/ending.tscn")
 	else:
+		# Mainkan SFX pintu terkunci
+		AudioManager.play_sfx("res://assets/music/locking_door.mp3")
+		
 		# Jalankan dialog terkunci jika tidak punya kartu akses
 		await DialogueManager.start_dialogue(stairs_dialogue)
 		
@@ -356,6 +359,10 @@ func interact_with_stairs() -> void:
 func enter_labkom() -> void:
 	player.can_move = false
 	is_flickering = false # Matikan lampu berkedip saat keluar scene
+	
+	# Mainkan SFX pintu terbuka
+	AudioManager.play_sfx("res://assets/music/opening-door.mp3")
+	
 	if fade_rect:
 		fade_rect.visible = true
 		var fade_tween = create_tween()

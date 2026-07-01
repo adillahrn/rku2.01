@@ -302,6 +302,9 @@ func _exit_to_corridor() -> void:
 	DialogueManager.player_has_key = DialogueManager.player_has_key or is_computer_completed
 	DialogueManager.spawn_at_labkom = true
 	
+	# Mainkan SFX pintu terbuka
+	AudioManager.play_sfx("res://assets/music/opening-door.mp3")
+	
 	if fade_rect:
 		fade_rect.visible = true
 		var fade_tween = create_tween()
