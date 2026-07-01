@@ -48,5 +48,4 @@ Game ini menggunakan GDScript. Beberapa komponen utama yang bisa dipelajari jika
 - `DialogueManager` & `AudioManager` diatur sebagai *Autoload/Singleton* sehingga dapat diakses dari scene mana saja.
 - UI Khusus seperti `quest_ui.tscn` dan `computer_ui.tscn` menangani interaksi spesifik pemain.
 
----
-*Dibuat oleh Adillah Ridwan.*
+
